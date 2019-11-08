@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bunfly.electric.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.bunfly.electric.pojo.User">
+    <id column="use_id" jdbcType="VARCHAR" property="useId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_no" jdbcType="VARCHAR" property="userNo" />
+    <result column="station_no" jdbcType="VARCHAR" property="stationNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    use_id, user_name, user_no, station_no
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where use_id = #{useId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user
+    where use_id = #{useId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.bunfly.electric.pojo.User">
+    insert into user (use_id, user_name, user_no, 
+      station_no)
+    values (#{useId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, 
+      #{stationNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bunfly.electric.pojo.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="useId != null">
+        use_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userNo != null">
+        user_no,
+      </if>
+      <if test="stationNo != null">
+        station_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="useId != null">
+        #{useId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userNo != null">
+        #{userNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stationNo != null">
+        #{stationNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bunfly.electric.pojo.User">
+    update user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userNo != null">
+        user_no = #{userNo,jdbcType=VARCHAR},
+      </if>
+      <if test="stationNo != null">
+        station_no = #{stationNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where use_id = #{useId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bunfly.electric.pojo.User">
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_no = #{userNo,jdbcType=VARCHAR},
+      station_no = #{stationNo,jdbcType=VARCHAR}
+    where use_id = #{useId,jdbcType=VARCHAR}
+  </update>
+</mapper>

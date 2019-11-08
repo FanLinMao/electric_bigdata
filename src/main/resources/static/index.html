@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>供电单位</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<script src="js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/echarts-all.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!-- login begin -->
+		<div class="logo">
+			<img src="img/ele.png" height="50px" style="margin: 0 20px 0 40px;float: left;">	
+				<p style="line-height: 50px;margin: 0px;font-size: 26px;">电网供电服务品质评价系统</p>
+		</div>
+		<!-- login end -->
+		<!-- nav begin -->
+		<nav class="navbar-uset navbar-default" role="navigation">
+			<div class="container-fluid"> 
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target="#example-navbar-collapse">
+					<span class="sr-only">切换导航</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="collapse navbar-collapse" id="example-navbar-collapse" >
+				<ul class="nav navbar-nav">
+					<li class=""><a href="#">首页</a></li>
+					<li><a href="./index.html">供电单位</a></li>
+					<!-- ./line.html -->
+					<li><a href="javascript:void(0)">供电线路</a></li>
+					<!-- ./station.html -->
+					<li><a href="javascript:void(0)">供电台区</a></li>
+				</ul>
+			</div>
+			</div>
+		</nav>
+		<ul class="breadcrumb breadcrumb-uset" style="padding: 10px 50px;border-bottom: 1px solid #ADADAD;">
+		    <li><a href="#">首页</a></li>
+		    <li><a href="#">供电单位</a></li>
+		</ul>
+		<!-- nav end-->
+		
+		<!-- form begin -->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<form role="form">
+					  <div class="row">
+						<div class="col-lg-3 col-md-6 form-group">
+						  <div class="row">
+						  	<div class="col-xs-3"  style="padding: 0;;line-height: 34px;">
+						  		起始时间：
+						  	</div>
+						  	<div class="col-xs-9">
+						  		<input type="date" class="form-control" id="beginMonth">						  		
+						  	</div>
+						  </div>
+						</div>
+						<div class="col-lg-3 col-md-6 form-group">
+						  <div class="row">
+						 	<div class="col-xs-3" style="padding: 0;;line-height: 34px;">
+						 		结束时间：
+						 	</div>
+						 	<div class="col-xs-9">
+						 		<input type="date" class="form-control" id="endMonth">						  		
+						 	</div>
+						 </div>
+						</div>
+						<div class="col-lg-3 form-group">
+						  <div class="row">						 	
+						 	<div class="col-xs-12">
+								<input type="button" class="btn btn-primary" id="query" value="提交">			  		
+						 	</div>
+						 </div>
+						</div>
+						<div class="col-lg-3 form-group">
+						  <div class="row">						 	
+						 	<div class="col-xs-12">
+								<p id="time_error_info" style="color:red"></p>			  		
+						 	</div>
+						 </div>
+						</div>
+					  </div>
+					</form>
+				</div>
+			</div>
+			
+		</div>
+		<!-- form end -->
+		<div class="container">
+			<!-- 供电质量 -->
+			<div class="row" >
+				<div class="col-md-8" id="psc_vqr" style="height: 290px;" >
+					
+				</div>
+				<div class="col-md-4" style="background-color: #ecf4f7;">
+					<div class="row" style="background-color: #fff;">
+						<div class="col-md-9" style="background-color: #006F6B;color: #fff;line-height: 40px;border-radius: 5px;">
+							<h4>当月供电质量评分</h4>
+						</div>
+						<div class="col-md-3" style="color: #000;line-height: 40px;">
+							<h4 id="currentMonthVQRScore"></h4>
+						</div>		
+					</div>
+					<div class="row">
+						<div class="col-md-12" style="height: 240px;" id="currentMonthVQR">
+						
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 供电能力 -->
+			<div class="row">
+				<div class="col-md-8" id="psc_asai" style="height: 290px;border-top: 1px solid #e0e0e0;" >
+					
+				</div>
+				<div class="col-md-4" style="background-color: #ecf4f7;">
+					<div class="row" style="background-color: #fff;">
+						<div class="col-md-9" style="background-color: #006F6B;color: #fff;line-height: 40px;border-radius: 5px;">
+							<h4>当月供电能力评分</h4>
+						</div>
+						<div class="col-md-3" style="color: #000;line-height: 40px;">
+							<h4 id="currentMonthASAIScore"></h4>
+						</div>		
+					</div>
+					<div class="row">
+						<div class="col-md-12" style="height: 240px;" id="currentMonthASAI">
+							
+						</div>
+					</div>
+				</div>
+				
+			</div>			
+		</div>
+	
+	</body>
+	<script type="text/javascript">
+	window.onload = function(){
+		$("#beginMonth").val("")
+		$("#endMonth").val("")
+	}
+	$("#query").click(function(){
+		
+		$("#time_error_info").text("")
+		var beginYear = $("#beginMonth").val().split("-")[0];
+		var beginMon = $("#beginMonth").val().split("-")[1];
+		var endYear = $("#endMonth").val().split("-")[0];
+		var endMon = $("#endMonth").val().split("-")[1];
+		var beginDate = new Date($("#beginMonth").val());
+		var endDate = new Date($("#endMonth").val());
+		if($("#beginMonth").val() == "" || $("#endMonth").val() == ""){
+			$("#time_error_info").text("请选择正确时间")
+		}else if(endDate < beginDate || endDate > new Date()){
+			$("#time_error_info").text("请选择正确时间")
+		}else if(endYear-beginYear >= 2 || (endYear-beginYear==1&&beginMon-endMon<=0)){
+			$("#time_error_info").text("选择时间不能超过12个月")
+		}else {
+			var begin = $("#beginMonth").val()
+			var end = $("#endMonth").val()
+			lotofmonthInfo(begin,end)
+		}
+		
+	});
+	　$.post("CurrentmonthVQRScore",function(data){
+		/* var data = $.parseJSON(data) */
+		$("#currentMonthVQRScore").text(data.score)
+	　})
+	 　$.post("CurrentmonthASAIScore",function(data){
+		 /* var data = $.parseJSON(data) */
+		 $("#currentMonthASAIScore").text(data.score)
+	　})
+	
+        // 基于准备好的dom，初始化echarts实例
+        //一年内供电质量
+		　$.post("LastyearVQR",function(data){
+	        var myChart = echarts.init(document.getElementById('psc_vqr','shine'));
+	        myChart.on('click', function(param) {
+			    //console.log(param);
+			   var url = "MonthVQR?month="+param.name;
+			    window.location.href = url;
+			});
+	        /* var data = $.parseJSON(data) */
+	        var value = new Array()
+			var date = new Array()
+			for ( var a in data) {
+				date.push(data[a].date)
+				value.push(data[a].vqr)
+			}
+			 // 指定图表的配置项和数据
+		       option = {
+					    title: {
+					        text: '供电质量分析'
+					    },
+					    tooltip: {
+					        trigger: 'axis'
+					    },
+					    
+					    grid: {
+					        left: '3%',
+					        right: '4%',
+					        bottom: '3%',
+					        containLabel: true
+					    },
+					    toolbox: {
+					        feature: {
+					            saveAsImage: {}
+					        }
+					    },
+					    xAxis: {
+					        type: 'category',
+					        boundaryGap: false,
+					        data: date
+					    },
+					    yAxis: [
+						{
+							type: 'value',
+							name: '城市综合电压合格率',
+							min: 80,
+							max: 100,
+							interval: 5,
+							axisLabel: {
+							formatter: '{value} %'
+							}
+						}],
+					    series: [
+					        {
+					            name:'城市综合电压合格率',
+					            type:'line',
+					            stack: '总量',
+					            data:value
+					        }
+					    ]
+					};
+			 myChart.setOption(option);
+			 window.addEventListener("resize",function(){
+					myChart.resize();
+				})
+		})
+        //chart2 begin ASAI
+       	　$.post("LastyearASAI",function(data){
+    	  	var myChart2 = echarts.init(document.getElementById('psc_asai','shine'));
+    	  	//初始化 value 和 date 数组
+    	  	/* var data = $.parseJSON(data) */
+	        var value = new Array()
+			var date = new Array()
+			for ( var a in data) {
+				date.push(data[a].date)
+				value.push(data[a].asai)
+			}
+			 // 指定图表的配置项和数据
+			option1 =  {
+			    title: {
+			        text: '供电能力分析'
+			    },
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    
+			    grid: {
+			        left: '3%',
+			        right: '4%',
+			        bottom: '3%',
+			        containLabel: true
+			    },
+			    toolbox: {
+			        feature: {
+			            saveAsImage: {}
+			        }
+			    },
+			    xAxis: {
+			        type: 'category',
+			        boundaryGap: false,
+			        data: date
+			    },
+			    yAxis: [
+				{
+					type: 'value',
+					name: '城市供电可靠率',
+					min: 80,
+					max: 100,
+					interval: 5,
+					axisLabel: {
+						formatter: '{value} %'
+					}
+				}],
+			    series: [
+			        {
+			            name:'城市供电可靠率',
+			            type:'line',
+			            stack: '总量',
+			            data:value
+			        }
+			    ]
+			};
+
+        // 使用刚指定的配置项和数据显示图表。
+       
+        myChart2.setOption(option1);
+		myChart2.on('click', function(param) {
+				    //console.log(param);
+				    var url = "MonthASAI?month="+param.name;
+				    window.location.href = url;
+				});
+		window.addEventListener("resize",function(){
+			
+			myChart2.resize();
+		})
+		
+       });
+        
+       //chart2 end
+       
+       //chart3 begin	current mmonth everyday vqr
+       $.post("CurrentmonthPC",function(data){
+    	   var myChart3 = echarts.init(document.getElementById('currentMonthASAI','macarons'));
+    	  	//初始化 value 和 date 数组
+/*     	  	var data = $.parseJSON(data)
+ */	        var headcount = new Array()		//覆盖用户数
+			var duration = new Array()	//持续时间
+    	  	var times = new Array()		//停电次数
+			for ( var a in data) {
+				headcount.push(data[a].userNum)
+				duration.push((data[a].endTime-data[a].startTime)/60)
+				times.push(a+"次")
+			}
+			
+		
+
+			option3 = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						crossStyle: {
+							color: '#999'
+						}
+					}
+				},
+				toolbox: {
+					feature: {
+					
+					}
+				},
+				grid: {
+				    left: '1%',
+				    right: '1%',
+				    bottom: '3%',
+				    containLabel: true
+				},
+				legend: {
+					data:['停电覆盖用户数','停电持续时间']
+				},
+				xAxis: [
+					{
+						type: 'category',
+						data: times,
+						axisPointer: {
+							type: 'shadow'
+						}
+					}
+				],
+				yAxis: [
+					{
+						type: 'value',
+						name: '停电覆盖用户数',
+						axisLabel: {
+							formatter: '{value} 户'
+						}
+					},
+					{
+						type: 'value',
+						name: '停电持续时间',
+						min: 0,
+						max: 24,
+						interval: 4,
+						axisLabel: {
+							formatter: '{value} h'
+						}
+					}
+				],
+				series: [
+					{
+						name:'停电覆盖用户数',
+						type:'bar',
+						data:headcount
+					},
+					{
+						name:'停电持续时间',
+						type:'line',
+						yAxisIndex: 1,
+						data:duration
+					}
+				]
+			};		
+			myChart3.setOption(option3);
+			window.addEventListener("resize",function(){
+				myChart3.resize();
+			})
+		});
+		
+       $.post("CurrentmonthVQR",function(data){
+    	   var myChart4 = echarts.init(document.getElementById('currentMonthVQR','macarons'));
+    	  	//初始化 value 和 date 数组
+    	  	/* var data = $.parseJSON(data) */
+	        var value = new Array()
+			var upper_time = new Array()
+    	  	var low_time = new Array()
+    	  	var date = new Array()
+			for ( var a in data) {
+				upper_time.push(data[a].upperTime)
+				low_time.push(data[a].lowTime)
+				value.push(data[a].vqr)
+				date.push(data[a].date.split("/")[2]+"日")
+			}	
+		option4 = {
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'cross',
+					crossStyle: {
+						color: '#999'
+					}
+				}
+			},
+			toolbox: {
+				feature: {
+					
+				}
+			},
+			grid: {
+			    left: '1%',
+			    right: '1%',
+			    bottom: '3%',
+			    containLabel: true
+			},
+			legend: {
+				data:['超上限时间','超下限时间','电压合格率']
+			},
+			xAxis: [
+				{
+					type: 'category',
+					data: date,
+					axisPointer: {
+						type: 'shadow'
+					}
+				}
+			],
+			yAxis: [
+				{
+					type: 'value',
+					name: '超限时间',
+					axisLabel: {
+						formatter: '{value} min'
+					}
+				},
+				{
+					type: 'value',
+					name: '电压合格率',
+					min: 0,
+					max: 100,
+					interval: 10,
+					axisLabel: {
+						formatter: '{value} %'
+					}
+				}
+			],
+			series: [
+				{
+					name:'超上限时间',
+					type:'bar',
+					data:upper_time
+				},
+				{
+					name:'超下限时间',
+					type:'bar',
+					data:low_time
+				},
+				{
+					name:'电压合格率',
+					type:'line',
+					yAxisIndex: 1,
+					data:value
+				}
+			]
+		};
+		myChart4.setOption(option4);
+		window.addEventListener("resize",function(){
+			myChart4.resize();
+		})
+       	});
+	function lotofmonthInfo(start,end) {
+		　$.post("LotofmonthVQR",{startMonth:start,endMonth:end},function(data){
+	        var myChart5 = echarts.init(document.getElementById('psc_vqr','shine'));
+	        myChart5.on('click', function(param) {
+			    //console.log(param);
+			   var url = "MonthVQR?month="+param.name;
+			    window.location.href = url;
+			});
+	       /*  var data = $.parseJSON(data) */
+	        var value = new Array()
+			var date = new Array()
+			for ( var a in data) {
+				date.push(data[a].date)
+				value.push(data[a].vqr)
+			}
+			 // 指定图表的配置项和数据
+		       option5 = {
+					    title: {
+					        text: '供电质量分析'
+					    },
+					    tooltip: {
+					        trigger: 'axis'
+					    },
+					    
+					    grid: {
+					        left: '3%',
+					        right: '4%',
+					        bottom: '3%',
+					        containLabel: true
+					    },
+					    toolbox: {
+					        feature: {
+					            saveAsImage: {}
+					        }
+					    },
+					    xAxis: {
+					        type: 'category',
+					        boundaryGap: false,
+					        data: date
+					    },
+					    yAxis: [
+						{
+							type: 'value',
+							name: '城市综合电压合格率',
+							min: 80,
+							max: 100,
+							interval: 5,
+							axisLabel: {
+							formatter: '{value} %'
+							}
+						}],
+					    series: [
+					        {
+					            name:'城市综合电压合格率',
+					            type:'line',
+					            stack: '总量',
+					            data:value
+					        }
+					    ]
+					};
+			 myChart5.setOption(option5);
+			 window.addEventListener("resize",function(){
+					myChart5.resize();
+				})
+		})
+        //chart2 begin ASAI
+       	　$.post("LotofmonthASAI",{startMonth:start,endMonth:end},function(data){
+    	  	var myChart6 = echarts.init(document.getElementById('psc_asai','shine'));
+    	  	//初始化 value 和 date 数组
+    	  	/* var data = $.parseJSON(data) */
+	        var value = new Array()
+			var date = new Array()
+			for ( var a in data) {
+				date.push(data[a].date)
+				value.push(data[a].asai)
+			}
+			 // 指定图表的配置项和数据
+			option6 =  {
+			    title: {
+			        text: '供电能力分析'
+			    },
+			    tooltip: {
+			        trigger: 'axis'
+			    },
+			    
+			    grid: {
+			        left: '3%',
+			        right: '4%',
+			        bottom: '3%',
+			        containLabel: true
+			    },
+			    toolbox: {
+			        feature: {
+			            saveAsImage: {}
+			        }
+			    },
+			    xAxis: {
+			        type: 'category',
+			        boundaryGap: false,
+			        data: date
+			    },
+			    yAxis: [
+				{
+					type: 'value',
+					name: '城市供电可靠率',
+					min: 80,
+					max: 100,
+					interval: 5,
+					axisLabel: {
+						formatter: '{value} %'
+					}
+				}],
+			    series: [
+			        {
+			            name:'城市供电可靠率',
+			            type:'line',
+			            stack: '总量',
+			            data:value
+			        }
+			    ]
+			};
+
+        // 使用刚指定的配置项和数据显示图表。
+       
+        myChart6.setOption(option6);
+		myChart6.on('click', function(param) {
+				    //console.log(param);
+				    var url = "MonthASAI?month="+param.name;
+				    window.location.href = url;
+				});
+		window.addEventListener("resize",function(){
+			
+			myChart6.resize();
+		})
+		
+       });
+        
+       //chart2 end
+	}
+    </script>
+</html>

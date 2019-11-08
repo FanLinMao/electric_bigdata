@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bunfly.electric.dao.MonthOfPscVqrMapper">
+  <resultMap id="BaseResultMap" type="com.bunfly.electric.pojo.MonthOfPscVqr">
+    <result column="psc_no" jdbcType="VARCHAR" property="pscNo" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="upper_time" jdbcType="VARCHAR" property="upperTime" />
+    <result column="low_time" jdbcType="VARCHAR" property="lowTime" />
+    <result column="vqr" jdbcType="VARCHAR" property="vqr" />
+  </resultMap>
+  <insert id="insert" parameterType="com.bunfly.electric.pojo.MonthOfPscVqr">
+    insert into month_of_psc_vqr (psc_no, date, upper_time, 
+      low_time, vqr)
+    values (#{pscNo,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{upperTime,jdbcType=VARCHAR}, 
+      #{lowTime,jdbcType=VARCHAR}, #{vqr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bunfly.electric.pojo.MonthOfPscVqr">
+    insert into month_of_psc_vqr
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pscNo != null">
+        psc_no,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="upperTime != null">
+        upper_time,
+      </if>
+      <if test="lowTime != null">
+        low_time,
+      </if>
+      <if test="vqr != null">
+        vqr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pscNo != null">
+        #{pscNo,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="upperTime != null">
+        #{upperTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lowTime != null">
+        #{lowTime,jdbcType=VARCHAR},
+      </if>
+      <if test="vqr != null">
+        #{vqr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="getLastyearVQR" resultMap="BaseResultMap">
+  	SELECT psc_no,date,SUM(upper_time) upper_time, SUM(low_time) low_time, ROUND(AVG(vqr),2) vqr from month_of_psc_vqr GROUP BY psc_no,date LIMIT 0,12;
+  </select>
+  
+  <select id="getCurrentMonthPscScore" resultMap="BaseResultMap">
+  	SELECT
+		month_of_psc_vqr.psc_no,
+		month_of_psc_vqr.date,
+		Sum(month_of_psc_vqr.upper_time) AS upper_time,
+		Sum(month_of_psc_vqr.low_time) AS low_time,
+		ROUND(Avg(month_of_psc_vqr.vqr),2) AS vqr
+	FROM
+		month_of_psc_vqr
+	WHERE
+			DATE_FORMAT(
+				STR_TO_DATE(month_of_psc_vqr.date, '%Y/%m'),'%Y/%m') 
+		  = DATE_FORMAT(CURRENT_DATE(), '%Y/%m')
+	GROUP BY
+		month_of_psc_vqr.psc_no,
+		month_of_psc_vqr.date
+  </select>
+  
+  <select id="getMonthVQR" parameterType="java.lang.String" resultMap="BaseResultMap">
+  		SELECT
+			psc_no,
+			SUM(upper_time) AS upper_time,
+			SUM(low_time) AS low_time,
+			date,
+			FORMAT(AVG(vqr), 2) AS vqr
+		FROM
+			month_of_psc_vqr
+		WHERE
+			date = #{monthk}
+		GROUP BY 
+			date,psc_no
+  </select>
+  
+  <select id="getNum" resultType="String">
+  	select total_day from month_of_asai where date=#{month}
+  </select>
+  <select id="getDays" resultType="String">
+	SELECT COUNT(*) FROM (select date FROM day_of_psc_vqr where date like CONCAT('',#{month},'%') GROUP BY psc_no,date) a
+  </select>
+  
+</mapper>

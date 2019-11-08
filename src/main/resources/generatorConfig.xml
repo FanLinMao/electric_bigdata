@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- 数据库驱动jar包指定路径 -->
+    <classPathEntry location="D:/eclipse/mysql-connector-java-5.1.38.jar" />
+
+    <context id="table" targetRuntime="MyBatis3">
+        <!-- 生成注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/><!-- 取消注释为true -->
+            <property name="suppressDate" value="true" /> <!-- 不生成时间戳为true-->
+        </commentGenerator>
+        <!-- 指定数据库连接 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/electric"
+                        userId="root"
+                        password="admin">
+        </jdbcConnection>
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+        <!-- java pojo生成位置  targetProject指定全路径名 F:/IdeaProjects/springboot_hello/src/main/java(也可以相对路径名：..\java)，下同-->
+        <javaModelGenerator targetPackage="com.bunfly.electric.pojo" targetProject=".\src\main\java">
+            <property name="enableSubPackages" value="false" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!-- 生成sql  XML配置文件 -->
+        <sqlMapGenerator targetPackage="mapping"  targetProject=".\src\main\resources">
+            <property name="enableSubPackages" value="false" />
+        </sqlMapGenerator>
+
+        <!-- 生成 xxxxMapper.java文件 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.bunfly.electric.dao"  targetProject=".\src\main\java">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <!-- 数据库中的表名 -->
+        <table tableName="day_of_asai" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+        <!-- <table tableName="day_of_psc_vqr" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+        <table tableName="day_of_station_vqr" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>  -->
+        <table tableName="month_of_asai" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+        <!-- <table tableName="month_of_psc_vqr" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+        <table tableName="month_of_station_vqr" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>  -->
+        <table tableName="station_power_cut" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+        <table tableName="station" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+        <table tableName="user" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+        </table>
+        
+
+    </context>
+</generatorConfiguration>

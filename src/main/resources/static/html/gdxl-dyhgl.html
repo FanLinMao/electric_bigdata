@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>供电线路</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<script src="/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://echarts.baidu.com/dist/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/macarons.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/shine.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!-- login begin -->
+		<div class="logo">
+			<img src="img/timg%20(1).jpg" height="50px" style="margin: 0 20px 0 40px;float: left;">	
+				<p style="line-height: 50px;margin: 0px;font-size: 26px;">电网供电服务品质评价系统</p>
+		</div>
+		<!-- login end -->
+		<!-- nav begin -->
+		<nav class="navbar-uset navbar-default" role="navigation">
+			<div class="container-fluid"> 
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target="#example-navbar-collapse">
+					<span class="sr-only">切换导航</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="collapse navbar-collapse" id="example-navbar-collapse" >
+				<ul class="nav navbar-nav">
+					<li class=""><a href="#">首页</a></li>
+					<li><a href="./index.html">供电单位</a></li>
+					<li><a href="./gdxl.html">供电线路</a></li>
+					<li><a href="./gdtq.html">供电台区</a></li>
+				</ul>
+			</div>
+			</div>
+		</nav>
+		<ul class="breadcrumb breadcrumb-uset" style="padding: 10px 50px;border-bottom: 1px solid #ADADAD;">
+		    <li><a href="#">首页</a></li>
+		    <li><a href="./gdxl.html">供电线路</a></li>
+			<li><a href="./gdxl-dyhgl.html">xx线路电压合格率</a></li>
+		</ul>
+		<!-- nav end-->
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-3" style="background-color: #ecf4f7;">
+					<div class="row" style="background-color: #fff;">
+						<div class="col-md-9" style="background-color: #006F6B;color: #fff;line-height: 40px;border-radius: 5px;">
+							<h4>201x-xxxx线路电压合格率评分</h4>
+						</div>
+						<div class="col-md-3" style="color: #000;line-height: 40px;">
+							<h4>95</h4>
+						</div>		
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-striped">
+								<caption>各项指标详细</caption>
+								<tbody>
+									<tr>
+										
+										<td>当月电压合格率</td>
+										<td>92%</td>
+									</tr>
+									<tr>
+										
+										<td>电压超上限总时间</td>
+										<td>872min</td>
+									</tr>
+									<tr>
+										<td>电压超下限总时间</td>
+										<td>872min</td>
+									</tr>
+									<tr>
+										<td>电压检测总时间</td>
+										<td>1888min</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- 图标展示 begin -->
+				<div class="col-xs-9">	
+					<div class="row">
+						<div class="col-xs-12" id="h" style="height: 290px;">
+							
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12" id="h2" style="height: 290px;">
+							
+						</div>
+					</div>
+				</div>
+				<!-- 图标展示 end -->
+			</div>
+		</div>
+		
+		
+	
+	</body>
+	<script type="text/javascript">
+		var myChart3 = echarts.init(document.getElementById('h','macarons'));
+		
+
+		option3 = {
+			 title: {
+			    text: '每日电压供电质量评分'
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'cross',
+					crossStyle: {
+						color: '#999'
+					}
+				}
+			},
+			toolbox: {
+				feature: {
+				
+				}
+			},
+			grid: {
+			    left: '1%',
+			    right: '1%',
+			    bottom: '3%',
+			    containLabel: true
+			},
+			legend: {
+				data:['停电覆盖用户数','停电持续时间']
+			},
+			xAxis: [
+				{
+					type: 'category',
+					data: ['1日','2日','3日','4日','5日','6日','7日','8日','9日','10日','11日','12日'],
+					axisPointer: {
+						type: 'shadow'
+					}
+				}
+			],
+			yAxis: [
+				{
+					type: 'value',
+					name: '供电质量评分',
+					min: 50,
+					max: 100,
+					interval: 10,
+					axisLabel: {
+						formatter: '{value} 分'
+					}
+				},
+				{
+					type: 'value',
+					name: '电压合格率',
+					min: 0,
+					max: 100,
+					interval: 10,
+					axisLabel: {
+						formatter: '{value} %'
+					}
+				}
+			],
+			series: [
+				{
+					name:'供电质量评分',
+					type:'bar',
+					data:[80.0, 84.9, 87, 93, 86, 89, 96, 93, 92, 100, 100, 100]
+				},
+				{
+					name:'电压合格率',
+					type:'line',
+					yAxisIndex: 1,
+					data:[20.0, 20.2, 30.3, 40.5, 60.3, 100, 20.3, 53.4, 83.0, 46.5, 72.0, 61.2]
+				}
+			]
+		};		
+		myChart3.setOption(option3);
+		
+			
+
+		option4 = {
+			 title: {
+			    text: '供电质量详细'
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'cross',
+					crossStyle: {
+						color: '#999'
+					}
+				}
+			},
+			toolbox: {
+				feature: {
+					
+				}
+			},
+			grid: {
+			    left: '1%',
+			    right: '1%',
+			    bottom: '3%',
+			    containLabel: true
+			},
+			legend: {
+				data:['超上限时间','超下限时间','电压合格率']
+			},
+			xAxis: [
+				{
+					type: 'category',
+					data: ['1日','2日','3日','4日','5日','6日','7日','8日','9日','10日','11日','12日'],
+					axisPointer: {
+						type: 'shadow'
+					}
+				}
+			],
+			yAxis: [
+				{
+					type: 'value',
+					name: '超限时间',
+					min: 0,
+					max: 180,
+					interval: 18,
+					axisLabel: {
+						formatter: '{value} min'
+					}
+				},
+				{
+					type: 'value',
+					name: '电压合格率',
+					min: 0,
+					max: 100,
+					interval: 10,
+					axisLabel: {
+						formatter: '{value} %'
+					}
+				}
+			],
+			series: [
+				{
+					name:'超上限时间',
+					type:'bar',
+					data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+				},
+				{
+					name:'超下限时间',
+					type:'bar',
+					data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+				},
+				{
+					name:'电压合格率',
+					type:'line',
+					yAxisIndex: 1,
+					data:[20.0, 20.2, 30.3, 40.5, 60.3, 100, 20.3, 53.4, 83.0, 46.5, 72.0, 61.2]
+				}
+			]
+		};
+		var myChart4 = echarts.init(document.getElementById('h2','macarons'));
+		myChart4.setOption(option4);
+    </script>
+</html>

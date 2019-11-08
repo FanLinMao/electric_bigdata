@@ -1,0 +1,37 @@
+*{
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+}
+body{
+	background-color: #d9edf752;
+}
+@media (min-width: 1200px){
+	.container {
+		width: 1200px;
+	}	
+}
+@media (min-width: 1700px){
+	.container {
+		width: 1700px;
+	}	
+}
+.navbar-uset{
+	position: relative;
+/*    min-height: 50px;*/
+/*    margin-bottom: 20px;*/
+    border: 1px solid transparent;
+}
+.breadcrumb{
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    list-style: none;
+	background-color:#FFFFFF;
+    border-radius: 4px;
+}
+.navbar-default{
+	background-color: #006f6b;
+}
+.navbar-default .navbar-nav > li > a{
+	color: #FFFFFF;
+	}

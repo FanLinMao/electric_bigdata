@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bunfly.electric.dao.DayOfAsaiMapper">
+  <resultMap id="BaseResultMap" type="com.bunfly.electric.pojo.DayOfAsai">
+    <result column="psc_no" jdbcType="VARCHAR" property="pscNo" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="asai" jdbcType="VARCHAR" property="asai" />
+    <result column="pcTimes" jdbcType="VARCHAR" property="pctimes" />
+    <result column="total_day" jdbcType="VARCHAR" property="totalDay" />
+  </resultMap>
+  <insert id="insert" parameterType="com.bunfly.electric.pojo.DayOfAsai">
+    insert into day_of_asai (psc_no, date, asai, 
+      pcTimes, total_day)
+    values (#{pscNo,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{asai,jdbcType=VARCHAR}, 
+      #{pctimes,jdbcType=VARCHAR}, #{totalDay,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bunfly.electric.pojo.DayOfAsai">
+    insert into day_of_asai
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pscNo != null">
+        psc_no,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="asai != null">
+        asai,
+      </if>
+      <if test="pctimes != null">
+        pcTimes,
+      </if>
+      <if test="totalDay != null">
+        total_day,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pscNo != null">
+        #{pscNo,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="asai != null">
+        #{asai,jdbcType=VARCHAR},
+      </if>
+      <if test="pctimes != null">
+        #{pctimes,jdbcType=VARCHAR},
+      </if>
+      <if test="totalDay != null">
+        #{totalDay,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="getDayOfAsaiBySearch" resultMap="BaseResultMap">
+  	SELECT
+		psc_no,
+		date,
+		asai,
+		pcTimes,
+		total_day
+	FROM
+		day_of_asai
+	WHERE
+	 	date BETWEEN DATE('${startMonth}') AND DATE('${endMonth}')
+  </select>
+  
+  <select id="getEverydayPSCASAI" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	SELECT
+		psc_no,
+		date,
+		asai,
+		pcTimes,
+		total_day
+	FROM
+		day_of_asai
+	WHERE
+	 	date 
+  	LIKE '%${month}%'
+  </select>
+  
+  
+</mapper>

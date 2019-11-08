@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bunfly.electric.dao.StationPowerCutMapper">
+  <resultMap id="BaseResultMap" type="com.bunfly.electric.pojo.StationPowerCut">
+    <result column="station_no" jdbcType="VARCHAR" property="stationNo" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="user_num" jdbcType="VARCHAR" property="userNum" />
+  </resultMap>
+  <insert id="insert" parameterType="com.bunfly.electric.pojo.StationPowerCut">
+    insert into station_power_cut (station_no, date, start_time, 
+      end_time, user_num)
+    values (#{stationNo,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=VARCHAR}, #{userNum,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bunfly.electric.pojo.StationPowerCut">
+    insert into station_power_cut
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stationNo != null">
+        station_no,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="userNum != null">
+        user_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stationNo != null">
+        #{stationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userNum != null">
+        #{userNum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <select id="getStationPowerCut" parameterType="java.lang.String" resultMap="BaseResultMap">
+  		SELECT
+			station_power_cut.station_no,
+			station_power_cut.date,
+			station_power_cut.start_time,
+			station_power_cut.end_time,
+			station_power_cut.user_num
+		FROM
+			station_power_cut
+		WHERE
+			date LIKE '%${month}%'
+  </select>
+  
+	<select id="getCurrentMonthPC" resultMap="BaseResultMap">
+  		SELECT
+			station_power_cut.station_no,
+			station_power_cut.date,
+			station_power_cut.start_time,
+			station_power_cut.end_time,
+			station_power_cut.user_num
+		FROM
+			station_power_cut
+		WHERE
+			date LIKE '%2018/8/%'
+  </select>
+  
+  
+</mapper>

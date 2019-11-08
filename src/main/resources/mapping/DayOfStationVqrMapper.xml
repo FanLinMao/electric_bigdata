@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bunfly.electric.dao.DayOfStationVqrMapper">
+  <resultMap id="BaseResultMap" type="com.bunfly.electric.pojo.DayOfStationVqr">
+    <result column="station_no" jdbcType="VARCHAR" property="stationNo" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="upper_time" jdbcType="VARCHAR" property="upperTime" />
+    <result column="low_time" jdbcType="VARCHAR" property="lowTime" />
+    <result column="vqr" jdbcType="VARCHAR" property="vqr" />
+  </resultMap>
+  <insert id="insert" parameterType="com.bunfly.electric.pojo.DayOfStationVqr">
+    insert into day_of_station_vqr (station_no, date, upper_time, 
+      low_time, vqr)
+    values (#{stationNo,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{upperTime,jdbcType=VARCHAR}, 
+      #{lowTime,jdbcType=VARCHAR}, #{vqr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bunfly.electric.pojo.DayOfStationVqr">
+    insert into day_of_station_vqr
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stationNo != null">
+        station_no,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="upperTime != null">
+        upper_time,
+      </if>
+      <if test="lowTime != null">
+        low_time,
+      </if>
+      <if test="vqr != null">
+        vqr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stationNo != null">
+        #{stationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="upperTime != null">
+        #{upperTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lowTime != null">
+        #{lowTime,jdbcType=VARCHAR},
+      </if>
+      <if test="vqr != null">
+        #{vqr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bunfly.electric.dao.DayOfPscVqrMapper">
+  <resultMap id="BaseResultMap" type="com.bunfly.electric.pojo.DayOfPscVqr">
+    <result column="psc_no" jdbcType="VARCHAR" property="pscNo" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="upper_time" jdbcType="VARCHAR" property="upperTime" />
+    <result column="low_time" jdbcType="VARCHAR" property="lowTime" />
+    <result column="vqr" jdbcType="VARCHAR" property="vqr" />
+  </resultMap>
+  <insert id="insert" parameterType="com.bunfly.electric.pojo.DayOfPscVqr">
+    insert into day_of_psc_vqr (psc_no, date, upper_time, 
+      low_time, vqr)
+    values (#{pscNo,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{upperTime,jdbcType=VARCHAR}, 
+      #{lowTime,jdbcType=VARCHAR}, #{vqr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bunfly.electric.pojo.DayOfPscVqr">
+    insert into day_of_psc_vqr
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pscNo != null">
+        psc_no,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="upperTime != null">
+        upper_time,
+      </if>
+      <if test="lowTime != null">
+        low_time,
+      </if>
+      <if test="vqr != null">
+        vqr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pscNo != null">
+        #{pscNo,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="upperTime != null">
+        #{upperTime,jdbcType=VARCHAR},
+      </if>
+      <if test="lowTime != null">
+        #{lowTime,jdbcType=VARCHAR},
+      </if>
+      <if test="vqr != null">
+        #{vqr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="getDayOfPscVqrBySearch" resultMap="BaseResultMap">
+  		SELECT
+			day_of_psc_vqr.psc_no,
+			day_of_psc_vqr.date,
+			Sum(day_of_psc_vqr.upper_time) AS upper_time,
+			Sum(day_of_psc_vqr.low_time) AS low_time,
+			ROUND(Avg(day_of_psc_vqr.vqr), 2) AS vqr
+		FROM
+			day_of_psc_vqr
+		WHERE
+			date BETWEEN DATE('${startMonth}')
+		AND DATE('${endMonth}')
+		GROUP BY
+			day_of_psc_vqr.psc_no,
+			day_of_psc_vqr.date
+  </select>
+  
+  <select id="getEverydayVQR" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	SELECT
+		day_of_psc_vqr.psc_no,
+		day_of_psc_vqr.date,
+		Sum(day_of_psc_vqr.upper_time) AS upper_time,
+		Sum(day_of_psc_vqr.low_time) AS low_time,
+		ROUND(Avg(day_of_psc_vqr.vqr),2) AS vqr
+	FROM
+		day_of_psc_vqr
+	WHERE
+		date LIKE '%${month}%'
+	GROUP BY
+		day_of_psc_vqr.psc_no,
+		day_of_psc_vqr.date
+  </select>
+  
+  <select id="getCurrentmonthVQR" resultMap="BaseResultMap">
+  		SELECT
+			day_of_psc_vqr.psc_no,
+			day_of_psc_vqr.date,
+			Sum(day_of_psc_vqr.upper_time) AS upper_time,
+			Sum(day_of_psc_vqr.low_time) AS low_time,
+			ROUND(Avg(day_of_psc_vqr.vqr),2) AS vqr
+		FROM
+			day_of_psc_vqr
+		WHERE
+			date like '%2019/7/%'
+		GROUP BY
+			day_of_psc_vqr.psc_no,
+			day_of_psc_vqr.date
+  </select>
+  
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bunfly.electric.dao.MonthOfAsaiMapper">
+  <resultMap id="BaseResultMap" type="com.bunfly.electric.pojo.MonthOfAsai">
+    <result column="psc_no" jdbcType="VARCHAR" property="pscNo" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="asai" jdbcType="VARCHAR" property="asai" />
+    <result column="pcTimes" jdbcType="VARCHAR" property="pctimes" />
+    <result column="total_day" jdbcType="VARCHAR" property="totalDay" />
+  </resultMap>
+  <insert id="insert" parameterType="com.bunfly.electric.pojo.MonthOfAsai">
+    insert into month_of_asai (psc_no, date, asai, 
+      pcTimes, total_day)
+    values (#{pscNo,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{asai,jdbcType=VARCHAR}, 
+      #{pctimes,jdbcType=VARCHAR}, #{totalDay,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bunfly.electric.pojo.MonthOfAsai">
+    insert into month_of_asai
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pscNo != null">
+        psc_no,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+      <if test="asai != null">
+        asai,
+      </if>
+      <if test="pctimes != null">
+        pcTimes,
+      </if>
+      <if test="totalDay != null">
+        total_day,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pscNo != null">
+        #{pscNo,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="asai != null">
+        #{asai,jdbcType=VARCHAR},
+      </if>
+      <if test="pctimes != null">
+        #{pctimes,jdbcType=VARCHAR},
+      </if>
+      <if test="totalDay != null">
+        #{totalDay,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="getLastYearAsaiInfo" resultMap="BaseResultMap">
+  	select psc_no, date, (asai)* 100 as asai, pcTimes, total_day from month_of_asai where date LIKE '%2018/%'
+  </select>
+  
+  <select id="getCurrentMonthScore" resultMap="BaseResultMap">
+  	SELECT
+		psc_no,
+		date,
+		pcTimes,
+		total_day,
+		asai * 100 AS asai
+	FROM
+		month_of_asai
+	WHERE
+		DATE_FORMAT(
+			STR_TO_DATE(date, '%Y/%m'),'%Y/%m') 
+	  = DATE_FORMAT(CURRENT_DATE(), '%Y/%m')
+  </select>
+  
+  <select id="getMonthASAIByMonth" resultMap="BaseResultMap">
+  		SELECT
+			psc_no,
+			date,
+			asai*100 AS asai,
+			pcTimes,
+			total_day
+		FROM
+			month_of_asai
+		WHERE
+			date = #{month}
+  </select>
+  
+</mapper>
